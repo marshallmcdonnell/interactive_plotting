@@ -1,0 +1,20 @@
+2017-09-18 20:08:19.112612 -> 'number' changed from 2.0 to 4.7 in 'MyModel'
+2017-09-18 20:08:19.112612     CALLING: '_add_number_to_list' in ./debugging_tracing.py
+2017-09-18 20:08:19.112719 ---> 'list_of_numbers_items' changed from <undefined> to <traits.trait_handlers.TraitListEvent object at 0x1f4e450> in 'MyModel'
+2017-09-18 20:08:19.112719       CALLING: 'handle_list_items_special' in /SNS/users/ntm/.local/lib/python2.7/site-packages/traits/traits_listener.py
+2017-09-18 20:08:19.112767 -----> 'list_of_numbers_items' changed from [] to [4.7] in 'MyModel'
+2017-09-18 20:08:19.112767         CALLING: '_count_items' in ./debugging_tracing.py
+2017-09-18 20:08:19.112799 <----- EXIT: '_count_items'
+2017-09-18 20:08:19.112810 <--- EXIT: 'handle_list_items_special'
+2017-09-18 20:08:19.112819 <- EXIT: '_add_number_to_list'
+
+2017-09-18 20:08:19.112831 -> 'number' changed from 4.7 to 3.0 in 'MyModel'
+2017-09-18 20:08:19.112831     CALLING: '_add_number_to_list' in ./debugging_tracing.py
+2017-09-18 20:08:19.112869 ---> 'list_of_numbers_items' changed from <undefined> to <traits.trait_handlers.TraitListEvent object at 0x1f4e610> in 'MyModel'
+2017-09-18 20:08:19.112869       CALLING: 'handle_list_items_special' in /SNS/users/ntm/.local/lib/python2.7/site-packages/traits/traits_listener.py
+2017-09-18 20:08:19.112901 -----> 'list_of_numbers_items' changed from [] to [3.0] in 'MyModel'
+2017-09-18 20:08:19.112901         CALLING: '_count_items' in ./debugging_tracing.py
+2017-09-18 20:08:19.112926 <----- EXIT: '_count_items'
+2017-09-18 20:08:19.112935 <--- EXIT: 'handle_list_items_special'
+2017-09-18 20:08:19.112943 <- EXIT: '_add_number_to_list'
+
