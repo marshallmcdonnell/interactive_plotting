@@ -1,9 +1,13 @@
 #!/usr/bin/env python 
 
+from traits.etsconfig.api import ETSConfig
+ETSConfig.toolkit = 'wx'
+
 from numpy import linspace, sin
 from traits.api import HasTraits, Instance
-from traitsui.api import View, Item, ComponentEditor
+from traitsui.api import View, Item
 from chaco.api import Plot, ArrayPlotData
+from enable.api import ComponentEditor
 
 class LinePlot(HasTraits):
     plot = Instance(Plot)
