@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-from traits.etsconfig.api import ETSConfig
-ETSConfig.toolkit = 'wx'
 
 from numpy import linspace, sin
 from traits.api import HasTraits, Instance

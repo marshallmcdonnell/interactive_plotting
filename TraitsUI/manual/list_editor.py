@@ -14,5 +14,5 @@ class ListEditorTest(HasTraits):
 my_list = ['Sample', 'BackRun', 'NormRun', 'EmptyEnv', 'EmtpyInstr']
 
 #list_ed = ListEditorTest(my_simple_list = my_list)
-list_ed = ListEditorTest()
+list_ed = ListEditorTest(my_simple_list=my_list)
 list_ed.configure_traits()
