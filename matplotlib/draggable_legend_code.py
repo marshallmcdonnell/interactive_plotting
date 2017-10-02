@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as _plt
 
 
 class DraggableLegend:
@@ -69,14 +69,14 @@ class DraggableLegend:
     def _scaleUpLegendFont(self,size_step=4):
         size = self.legend.get_texts()[0].get_fontsize()
         size += size_step
-        plt.setp(plt.gca().get_legend().get_texts(), fontsize=size) #legend 'list' fontsize
+        _plt.setp(self.legend.get_texts(), fontsize=size) #legend 'list' fontsize
         self.legend.figure.canvas.draw()
          
 
     def _scaleDownLegendFont(self,size_step=4):
         size = self.legend.get_texts()[0].get_fontsize()
         size -= size_step
-        plt.setp(plt.gca().get_legend().get_texts(), fontsize=size) #legend 'list' fontsize
+        _plt.setp(self.legend.get_texts(), fontsize=size) #legend 'list' fontsize
         self.legend.figure.canvas.draw()
 
     def _hideLegend(self):
@@ -90,9 +90,9 @@ class DraggableLegend:
 
 
 
-figure = plt.figure() 
+figure = _plt.figure() 
 ax = figure.add_subplot(111)
 scatter = ax.scatter(np.random.randn(100), np.random.randn(100), label='hi')
 legend = ax.legend()
 legend = DraggableLegend(legend)
-plt.show()
+_plt.show()
