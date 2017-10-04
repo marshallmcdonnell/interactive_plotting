@@ -63,11 +63,6 @@ class MPLFigureEditor(BasicEditorFactory):
 #--------------------------------------------------------------------------#
 # Main TraitsUI section
 
-class InstanceUItem(UItem):
-    """Convenience class for including an Instance in a View"""
-    style = Str('custom')
-    editor = Instance(InstanceEditor, ())
-
 class PlotView(HasTraits):
     """Defines a sub-view whose size we wish to explicitly control."""
     scale = Float(1.0)
@@ -91,6 +86,8 @@ class PlotView(HasTraits):
 
         if len(x) != len(y): return
 
+        print self.figure
+        print self.figure.axes
         if len(self.figure.axes) == 0:
             axes = self.figure.add_subplot(111)
  
@@ -110,11 +107,11 @@ class PlotView(HasTraits):
 
 class VerticalBar(HasTraits):
     """Defines a sub-view whose size we wish to explicitly control."""
-    dummy = Str('abcdefg')
+    string = Str('abcdefg')
     shift = Float('0.0')
     view = View(
         VGroup(
-            Item('dummy'),
+            Item('string'),
             Item('shift'),
             show_border=True,
         ),
@@ -138,18 +135,23 @@ class BigView(HasTraits):
             # proportionate width, use a width < 1.0)
             # We specify the height here for sake of demonstration;
             # it could also be specified for the top-level view.
-            InstanceUItem('bar', width=150),
-            InstanceUItem('plot', width=500, height=500),
+            UItem('bar', width=150,style='custom',editor=InstanceEditor() ),
+            UItem('plot', width=500, height=500,style='custom',editor=InstanceEditor() ),
             show_border=True,
         ),
         resizable=True,
     )
 
     @on_trait_change('bar.shift')
-    def print_bar_dummy(self):
+    def shift_plot(self):
         self.plot.ydata = self.plot.ydata + self.bar.shift
+
+    @on_trait_change('bar.string')
+    def print_string(self):
+        print self.bar.string
 
 x = linspace(-2 * pi, 2 * pi, 100)
 pv = PlotView(xdata=x, ydata=sin(x))
 bv = BigView(plot=pv)
 bv.configure_traits()
+
