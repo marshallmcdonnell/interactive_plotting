@@ -13,6 +13,7 @@ from traitsui.api import TreeEditor, TreeNode, View, Item, Group
 
 import sys
 import tables as tb
+import h5py
 
 
 # View for objects that aren't edited
@@ -89,23 +90,92 @@ def _get_sub_groups(group, h5file):
 
     return l
 
+def _new_get_sub_arrays(group, h5file):
+    """Return a list of all arrays immediately below a group in an HDF5 file."""
+    l = []
+
+    for array in h5file.iter_nodes(group, classname='Array'):
+        a = Hdf5ArrayNode(
+            name=array._v_name,
+            path=array._v_pathname,
+            parent_path=array._v_parent._v_pathname,
+        )
+        l.append(a)
+
+    return l
+
+
+def _new_get_sub_groups(group, h5file):
+    """Return a list of all groups and arrays immediately below a group in an HDF5 file."""
+    l = []
+
+    for key, val in dict(group).iteritems():
+        det = group[key+'/instrument/detector/detector_positions']
+        print(key,  det.value)
+    exit()
+
+
+    for subgroup in h5file.iter_nodes(group, classname='Group'):
+        g = Hdf5GroupNode(
+            name=subgroup._v_name,
+            path=subgroup._v_pathname,
+            parent_path=subgroup._v_parent._v_pathname,
+        )
+
+        subarrays = _get_sub_arrays(subgroup, h5file)
+        if subarrays != []:
+            g.arrays = subarrays
+
+        subgroups = _get_sub_groups(subgroup, h5file)
+        if subgroups != []:
+            g.groups = subgroups
+
+        g.groups_and_arrays = []
+        g.groups_and_arrays.extend(subgroups)
+        g.groups_and_arrays.extend(subarrays)
+
+        l.append(g)
+
+    return l
+
+
 
 def _hdf5_tree(filename):
     """Return a list of all groups and arrays below the root group of an HDF5 file."""
 
-    h5file = tb.open_file(filename, 'r')
+    try_pytables = False
+    if try_pytables:
+        h5file = tb.open_file(filename, 'r')
 
-    file_tree = Hdf5FileNode(
-        name=filename,
-        groups=_get_sub_groups(h5file.root, h5file),
-        arrays=_get_sub_arrays(h5file.root, h5file),
-    )
+        print("\nPyTables\n-------")
+        print(h5file.root)
 
-    file_tree.groups_and_arrays = []
-    file_tree.groups_and_arrays.extend(file_tree.groups)
-    file_tree.groups_and_arrays.extend(file_tree.arrays)
+        file_tree = Hdf5FileNode(
+            name=filename,
+            groups=_get_sub_groups(h5file.root, h5file),
+            arrays=_get_sub_arrays(h5file.root, h5file),
+        )
 
-    h5file.close()
+        file_tree.groups_and_arrays = []
+        file_tree.groups_and_arrays.extend(file_tree.groups)
+        file_tree.groups_and_arrays.extend(file_tree.arrays)
+
+        h5file.close()
+
+
+    # h5py attempt
+    try_h5py = True
+    if try_h5py:
+        h5py_file = h5py.File(filename, 'r')
+        print("\nh5py    \n-------")
+        print(h5py_file.parent)
+        print(h5py_file.name)
+
+        new_file_tree = Hdf5FileNode(
+            name=filename,
+            groups=_new_get_sub_groups(h5py_file.parent, h5py_file),
+            arrays=_new_get_sub_arrays(h5py_file.parent, h5py_file)
+        )
 
     return file_tree
 
