@@ -26,7 +26,7 @@ We have the hierarchy:
 
 
 from traits.api \
-    import HasTraits, Str, List, Any, Instance, DelegatesTo
+    import HasTraits, Str, List, Any, Instance 
 
 from traitsui.api \
     import View, Group, Item, TreeEditor, \
@@ -62,8 +62,6 @@ class TModel(HasTraits):
 class TNode(TreeNodeObject):
 
     model = Instance(TModel())
-
-    kids = DelegatesTo("model")
 
     # Special named trait which is listened by the Tree for icon changes.
     icon = Str
@@ -191,5 +189,3 @@ main = RootModel(title='main',
 
 tree = Tree(root=main)
 tree.configure_traits()
-'''
-'''
