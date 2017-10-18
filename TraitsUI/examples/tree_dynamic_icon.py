@@ -35,7 +35,7 @@ class TNode(TreeNodeObject):
         if global_count % 3:
             return '<group>'
         else:
-            return 'img.png'
+            return 'equation_example_1.png'
 
 class TView(HasTraits):
     root = Instance(TNode)
