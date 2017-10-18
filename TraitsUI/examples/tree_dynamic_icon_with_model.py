@@ -32,9 +32,8 @@ from traitsui.api \
     import View, Group, Item, TreeEditor, \
     TreeNode, TreeNodeObject, ObjectTreeNode
 
-
 # --------------------------------------------#
-# Tree Node
+# Leaf Node
 
 
 class LeafModel(HasTraits):
@@ -48,8 +47,9 @@ class LeafNode(TreeNode):
 
     label = 'title'
 
+
 # --------------------------------------------#
-# Tree Node Object
+# Tree Node with adjustable icon 
 
 
 class TModel(HasTraits):
@@ -108,18 +108,16 @@ class ObjectTNode(ObjectTreeNode):
     children = 'kids'
 
     # List of objects that can be added as node
-    add = [LeafNode]
+    add = [LeafModel]
 
 # --------------------------------------------#
-# Root class
-
+# Root Node
 
 class RootModel(HasTraits):
 
     title = Str
 
-    tnodes = List(TNode)
-
+    tmodels = List(TModel)
 
 class RootNode(TreeNode):
 
@@ -127,9 +125,15 @@ class RootNode(TreeNode):
 
     label = 'title'
 
-    children = 'tnodes'
-
     add = [LeafModel]
+
+    def allows_children(self, object):
+        return True
+
+    def get_children(self, object):
+        tnodes = [ TNode(model=tm) for tm in object.tmodels ]
+        return tnodes
+
 
 # --------------------------------------------#
 # Tree
@@ -184,7 +188,7 @@ tn1 = TNode(model=tm1)
 tn2 = TNode(model=tm2)
 
 main = RootModel(title='main',
-                 tnodes=[tn1, tn2],
+                 tmodels=[tm1, tm2],
                  )
 
 tree = Tree(root=main)
